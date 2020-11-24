@@ -1,5 +1,4 @@
 package com.example.restaurantesnight.CORE;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -115,6 +114,24 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + " WHERE "
                     + MESAS_ID + " = "
                     + id
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
+
+    public void eliminar_Todas()
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+
+        try {
+            DB.beginTransaction();
+            DB.execSQL("DELETE FROM " + TABLA_MESAS
 
             );
             DB.setTransactionSuccessful();
