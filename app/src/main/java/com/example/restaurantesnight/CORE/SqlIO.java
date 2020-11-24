@@ -100,6 +100,7 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
+
     public void eliminar_Mesa(int id)
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
@@ -110,11 +111,11 @@ public class SqlIO  extends SQLiteOpenHelper {
         try {
             DB.beginTransaction();
             DB.execSQL("DELETE FROM " + TABLA_MESAS
-                    + "("
+
                     + " WHERE "
                     + MESAS_ID + " = "
                     + id
-                    + ")"
+
             );
             DB.setTransactionSuccessful();
         } catch(SQLException error)

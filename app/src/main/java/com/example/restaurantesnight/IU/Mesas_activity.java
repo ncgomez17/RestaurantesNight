@@ -1,6 +1,5 @@
 package com.example.restaurantesnight.IU;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,7 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.restaurantesnight.CORE.Mesa;
 import com.example.restaurantesnight.CORE.SqlIO;
@@ -19,7 +22,7 @@ import com.example.restaurantesnight.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mesas_activity extends Activity {
+public class Mesas_activity extends AppCompatActivity {
    private List<Mesa> array_mesas;
     private ArrayAdapter<String> itemsAdapter;
     @Override
@@ -34,7 +37,6 @@ public class Mesas_activity extends Activity {
         final ListView LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
         final Button BT_INSERTA = (Button) this.findViewById( R.id.btAnhadirMesas );
         this.array_mesas= new ArrayList<>();
-
         BT_INSERTA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +88,56 @@ public class Mesas_activity extends Activity {
 
         DLG.create().show();
     }
+    private void elimina_mesa()
+    {
+        final AlertDialog.Builder DLG = new AlertDialog.Builder( this );
+        final EditText id_mesa = new EditText( this );
+        DLG.setTitle( "Eliminar Mesa" );
+        DLG.setMessage("Indica el numero de mesa");
+        DLG.setView(id_mesa);
+        DLG.setPositiveButton("Guarda", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    int id = Integer.parseInt(id_mesa.getText().toString());
+                    Mesas_activity.this.sqlIO.eliminar_Mesa(id);
+                    Mesas_activity.this.actualiza();
+                }catch (NumberFormatException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        DLG.create().show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        super.onCreateOptionsMenu( menu );
+
+        this.getMenuInflater().inflate( R.menu.menu_mesas, menu );
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // gracias a la id, sabemos que item es el que se oprime, en este caso usamos un switch
+        switch (item.getItemId())
+        {
+            case R.id.menu_anhadir_mesa:
+                this.inserta();
+                return true;
+            case R.id.menu_eliminar_mesa:
+                this.elimina_mesa();
+                return true;
+            case R.id.menu_eliminar_mesas:
+                //presiono em item3
+                return true;
+            default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private SimpleCursorAdapter cursorAdapter;
     private SqlIO sqlIO;

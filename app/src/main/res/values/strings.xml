@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">RestaurantesNight</string>
     <string name="anhadir_mesa">Añadir mesa</string>
+    <string name="eliminar_mesa">Eliminar una mesa</string>
+    <string name="eliminar_mesas">Eliminar todas las mesas</string>
 </resources>

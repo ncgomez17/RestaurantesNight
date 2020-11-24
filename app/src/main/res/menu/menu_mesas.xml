@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/anhadir_mesa" android:id="@+id/menu_anhadir_mesa" />
+    <item android:title="@string/eliminar_mesa" android:id="@+id/menu_eliminar_mesa" />
+    <item android:title="@string/eliminar_mesas" android:id="@+id/menu_eliminar_mesas" />
+</menu>
