@@ -125,4 +125,22 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
+
+    public void eliminar_Todas()
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+
+        try {
+            DB.beginTransaction();
+            DB.execSQL("DELETE FROM " + TABLA_MESAS
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
 }
