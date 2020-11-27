@@ -3,4 +3,7 @@
     <string name="anhadir_mesa">Añadir mesa</string>
     <string name="eliminar_mesa">Eliminar una mesa</string>
     <string name="eliminar_mesas">Eliminar todas las mesas</string>
+    <string name="contx_eliminar_mesa">Eliminar esta mesa</string>
+    <string name="contxt_cambiar_plazas">Cambiar el número de plazas</string>
+    <string name="contxt_cambiar_numero">Cambiar el número de la mesa</string>
 </resources>

@@ -74,7 +74,7 @@ public class SqlIO  extends SQLiteOpenHelper {
                 MESAS_ID
         );
     }
-
+//FUNCION PARA INSERTAR UNA MESA COMPLETA, CON SU NUMERO DE MESA Y PLAZAS
     public void inserta_Mesa(int id,int capacidad)
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
@@ -82,7 +82,6 @@ public class SqlIO  extends SQLiteOpenHelper {
 
         VALORES.put( MESAS_ID, id );
         VALORES.put( MESAS_CAPACIDAD, capacidad );
-
 
         try {
             DB.beginTransaction();
@@ -99,14 +98,10 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
-
+//FUNCION PARA ELIMINAR LA MESA A PARTIR DE SU ID
     public void eliminar_Mesa(int id)
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
-        final ContentValues VALORES = new ContentValues();
-
-        VALORES.put( MESAS_ID, id );
-
         try {
             DB.beginTransaction();
             DB.execSQL("DELETE FROM " + TABLA_MESAS
@@ -124,7 +119,29 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
+    //FUNCION PARA CAMBIAR LAS PLAZAS DE UNA MESA A PARTIR DE SU ID
+    public void cambiar_plazas(int id,int plazas)
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+        try {
+            DB.beginTransaction();
+            DB.execSQL("UPDATE " + TABLA_MESAS
+                    + " SET " + MESAS_CAPACIDAD
+                    + " = " + plazas
+                    + " WHERE "
+                    + MESAS_ID + " = "
+                    + id
 
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
+//FUNCION PARA ELIMINAR TODAS LAS MESAS
     public void eliminar_Todas()
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
