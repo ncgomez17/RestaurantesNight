@@ -1,4 +1,5 @@
 package com.example.restaurantesnight.CORE;
+
 //Clase que Mesa
 public class Mesa {
     //Constructor se le pasará un número de mesa y el número de plazas
@@ -26,3 +27,4 @@ public class Mesa {
     private int num;
     private int plazas;
 }
+

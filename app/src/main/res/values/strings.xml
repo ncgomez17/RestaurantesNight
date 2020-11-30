@@ -6,4 +6,6 @@
     <string name="contx_eliminar_mesa">Eliminar esta mesa</string>
     <string name="contxt_cambiar_plazas">Cambiar el número de plazas</string>
     <string name="contxt_cambiar_numero">Cambiar el número de la mesa</string>
+    <string name="contx_anhadir_reserva">Añadir una Reserva</string>
+    <string name="contxt_eliminar_reserva">Eliminar una Reserva</string>
 </resources>

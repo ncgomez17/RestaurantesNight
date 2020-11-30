@@ -13,6 +13,13 @@ public class SqlIO  extends SQLiteOpenHelper {
     public static final String TABLA_MESAS="Mesas";
     public static final String MESAS_ID="_id";
     public static final String MESAS_CAPACIDAD="capacidad";
+    public static final String TABLA_RESERVAS="Reservas";
+    public static final String RESERVA_TITULAR="Titular";
+    public static final String RESERVA_EMAIL="Email";
+    public static final String RESERVA_MENU="Menu";
+    public static final String RESERVA_HORARIO_INICIO="Horario_Inicio";
+    public static final String RESERVA_HORARIO_FIN="Horario_Fin";
+    public static final String RESERVA_MESA="Id_Mesa";
 
     public SqlIO(Context cntxt){
         super(cntxt,DB_NOMBRE,null,DB_VERSION);
@@ -30,6 +37,20 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + "("
                     + MESAS_ID + " INTEGER PRIMARY KEY NOT NULL ,"
                     + MESAS_CAPACIDAD + " INTEGER NOT NULL"
+                    + ")"
+            );
+            db.beginTransaction();
+
+            db.execSQL( "CREATE TABLE IF NOT EXISTS " + TABLA_RESERVAS
+                    + "("
+                    + RESERVA_TITULAR + " TEXT PRIMARY KEY NOT NULL ,"
+                    + RESERVA_EMAIL + " TEXT NOT NULL ,"
+                    + RESERVA_MENU + " TEXT  NOT NULL ,"
+                    + RESERVA_HORARIO_INICIO + " DATE NOT NULL ,"
+                    + RESERVA_HORARIO_FIN + " DATE NOT NULL ,"
+                    + RESERVA_MESA + " INTEGER NOT NULL ,"
+                    +" FOREIGN KEY " + "(" + RESERVA_MESA + ")" +
+                    " REFERENCES " + TABLA_MESAS +"(" + MESAS_ID + ")"
                     + ")"
             );
 

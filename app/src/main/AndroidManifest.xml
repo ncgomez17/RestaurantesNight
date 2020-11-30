@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".IU.Mesas_activity">
         </activity>
+        <activity android:name=".IU.Reservas_Activity">
+        </activity>
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.restaurantesnight.CORE.Mesa;
 import com.example.restaurantesnight.CORE.SqlIO;
 import com.example.restaurantesnight.R;
 
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mesas_activity extends AppCompatActivity {
-    private List<Mesa> array_mesas;
-    private ArrayAdapter<String> itemsAdapter;
     private ListView LV_MESAS;
+    private SimpleCursorAdapter cursorAdapter;
+    private SqlIO sqlIO;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -38,8 +37,6 @@ public class Mesas_activity extends AppCompatActivity {
         this.sqlIO = new SqlIO( this.getApplicationContext() );
         LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
         final Button BT_INSERTA = (Button) this.findViewById( R.id.btAnhadirMesas );
-        this.array_mesas= new ArrayList<>();
-
         // INICIALIZAR VISTAS
         BT_INSERTA.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,8 +246,4 @@ public class Mesas_activity extends AppCompatActivity {
         }
     }
 
-
-
-    private SimpleCursorAdapter cursorAdapter;
-    private SqlIO sqlIO;
 }

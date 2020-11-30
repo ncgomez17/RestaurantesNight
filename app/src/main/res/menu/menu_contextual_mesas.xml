@@ -2,5 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/contx_eliminar_mesa" android:id="@+id/contx_eliminar_mesa" />
     <item android:title="@string/contxt_cambiar_plazas" android:id="@+id/contx_cambiar_plazas" />
-    <item android:title="@string/contxt_cambiar_numero" android:id="@+id/contx_cambiar_numero" />
 </menu>

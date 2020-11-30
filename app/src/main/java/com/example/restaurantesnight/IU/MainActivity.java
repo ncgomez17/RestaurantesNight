@@ -27,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
         });
         bt_reservas.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View arg0) {
+                Intent intent2 = new Intent (MainActivity.this, Reservas_Activity.class);
+                startActivity(intent2);
             }
         });
     }
