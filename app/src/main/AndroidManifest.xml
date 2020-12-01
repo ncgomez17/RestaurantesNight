@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".IU.Reservas_Activity">
         </activity>
+        <activity android:name=".IU.Listar_reservas_activity">
+        </activity>
     </application>
 
 </manifest>
