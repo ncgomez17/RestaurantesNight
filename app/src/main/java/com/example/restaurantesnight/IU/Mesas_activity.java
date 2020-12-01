@@ -91,61 +91,20 @@ public class Mesas_activity extends AppCompatActivity {
     private void elimina_mesa()
     {
         final AlertDialog.Builder DLG = new AlertDialog.Builder( this );
-        final AlertDialog.Builder DLG1 = new AlertDialog.Builder( this );
         final EditText id_mesa = new EditText( this );
         DLG.setTitle( "Eliminar Mesa" );
         DLG.setMessage("Indica el numero de mesa");
         DLG.setView(id_mesa);
-        DLG.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+        DLG.setPositiveButton("Guarda", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DLG1.setTitle( "Eliminar Mesa" );
-                    DLG1.setMessage("Está seguro de que quiere eliminar la mesa?");
-                    DLG1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            int id = Integer.parseInt(id_mesa.getText().toString());
-                            Mesas_activity.this.sqlIO.eliminar_Mesa(id);
-                            Mesas_activity.this.actualiza();
-                        }
-                    });
-                    DLG1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            return;
-                        }
-                    });
-                    DLG1.create().show();
-                }catch (NumberFormatException e){
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        DLG.create().show();
-    }
-
-    private void elimina_todas()
-    {
-        final AlertDialog.Builder DLG = new AlertDialog.Builder( this );
-        final EditText id_mesa = new EditText( this );
-        DLG.setTitle( "Eliminar Todas las mesas" );
-        DLG.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    Mesas_activity.this.sqlIO.eliminar_Todas();
+                    int id = Integer.parseInt(id_mesa.getText().toString());
+                    Mesas_activity.this.sqlIO.eliminar_Mesa(id);
                     Mesas_activity.this.actualiza();
                 }catch (NumberFormatException e){
                     e.printStackTrace();
                 }
-            }
-        });
-        DLG.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
             }
         });
 
@@ -172,7 +131,7 @@ public class Mesas_activity extends AppCompatActivity {
                 this.elimina_mesa();
                 return true;
             case R.id.menu_eliminar_mesas:
-                this.elimina_todas();
+                //presiono em item3
                 return true;
             default:
         }
