@@ -2,4 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/contx_anhadir_reserva" android:id="@+id/contx_anhadir_reserva" />
     <item android:title="@string/contxt_eliminar_reserva" android:id="@+id/contx_eliminar_reserva" />
+    <item android:title="Listar reservas de la mesa" android:id="@+id/contx_listar_reservas" />
 </menu>
