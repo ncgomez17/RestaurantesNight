@@ -3,33 +3,28 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.restaurantesnight.CORE.SqlIO;
 import com.example.restaurantesnight.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class Reservas_Activity extends AppCompatActivity {
     private ListView LV_MESAS;
@@ -66,7 +61,7 @@ public class Reservas_Activity extends AppCompatActivity {
                 this.sqlIO.getCursorMesas() );
     }
     //Crea un dialógo para insertar una reserva en la mesa
-    private void inserta()
+    private void inserta(int id_mesa)
     {
         final AlertDialog.Builder DLG = new AlertDialog.Builder( this );
         final View customLayout = getLayoutInflater().inflate(R.layout.entrada_reserva, null);
@@ -78,6 +73,9 @@ public class Reservas_Activity extends AppCompatActivity {
         final Button btn_horaFin= (Button)  customLayout.findViewById(R.id.btn_horaFin);
         final TextView txt_fechaFin= (TextView)  customLayout.findViewById(R.id.txt_fechaFin);
         final TextView txt_horaFin= (TextView)  customLayout.findViewById(R.id.txt_horaFin);
+        final EditText EditTextTitular = (EditText) customLayout.findViewById(R.id.titular);
+        final EditText EditTextEmail = (EditText) customLayout.findViewById(R.id.email);
+        final EditText EditTextMenu = (EditText) customLayout.findViewById(R.id.menu);
         //Definimos los eventos de los botones
         btn_fecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +147,15 @@ public class Reservas_Activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
+                    String toretInicio = txt_hora.getText().toString() + " " + txt_fecha.getText().toString();
+
+                    String toretFin = txt_horaFin.getText().toString() + " " + txt_fechaFin.getText().toString();
+
+                    String titular = EditTextTitular.getText().toString();
+                    String email =EditTextEmail.getText().toString();
+                    String menu = EditTextMenu.getText().toString();
+
+                    Reservas_Activity.this.sqlIO.inserta_Reserva(id_mesa, titular, email, menu, toretInicio, toretFin);
 
 
                 }catch (NumberFormatException e){
@@ -159,6 +166,13 @@ public class Reservas_Activity extends AppCompatActivity {
 
         DLG.create().show();
     }
+
+    //FUNCIÓN QUE LISTA LAS RESERVAS QUE TIENE LA MESA SELECCIONADA
+    private void listar_reservas_mesa(){
+        Intent intent = new Intent (Reservas_Activity.this, Listar_reservas_activity.class);
+        startActivity(intent);
+    }
+
     //Funcion para crear el menu contextual
     @Override
     public void onCreateContextMenu(ContextMenu contxt, View v, ContextMenu.ContextMenuInfo cmi)
@@ -177,16 +191,19 @@ public class Reservas_Activity extends AppCompatActivity {
         LinearLayout l_mesa= (LinearLayout) LV_MESAS.getChildAt(info.position);
         final TextView ID_MESA=l_mesa.findViewById(R.id.id_mesa);
         final TextView NUM_PLAZAS=l_mesa.findViewById(R.id.num_plazas);
-        int id = Integer.parseInt(ID_MESA.getText().toString());
+        int id_mesa = Integer.parseInt(ID_MESA.getText().toString());
         try {
 
 
             switch (item.getItemId()) {
                 case R.id.contx_anhadir_reserva:
-                    this.inserta();
+                    this.inserta(id_mesa);
                     return true;
 
                 case R.id.contx_eliminar_reserva:
+                    return true;
+                case R.id.contx_listar_reservas:
+                    this.listar_reservas_mesa();
                     return true;
                 default:
                     return super.onContextItemSelected(item);

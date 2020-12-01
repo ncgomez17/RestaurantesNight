@@ -1,5 +1,4 @@
 package com.example.restaurantesnight.CORE;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +6,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.Date;
+
 /*Base de datos SQlite, tendrá tablas de mesas y de usuarios */
 public class SqlIO  extends SQLiteOpenHelper {
     private static final String DB_NOMBRE="RestauranteNight";
@@ -14,6 +16,13 @@ public class SqlIO  extends SQLiteOpenHelper {
     public static final String TABLA_MESAS="Mesas";
     public static final String MESAS_ID="_id";
     public static final String MESAS_CAPACIDAD="capacidad";
+    public static final String TABLA_RESERVAS="Reservas";
+    public static final String RESERVA_TITULAR="Titular";
+    public static final String RESERVA_EMAIL="Email";
+    public static final String RESERVA_MENU="Menu";
+    public static final String RESERVA_HORARIO_INICIO="Horario_Inicio";
+    public static final String RESERVA_HORARIO_FIN="Horario_Fin";
+    public static final String RESERVA_MESA="Id_Mesa";
 
     public SqlIO(Context cntxt){
         super(cntxt,DB_NOMBRE,null,DB_VERSION);
@@ -31,6 +40,20 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + "("
                     + MESAS_ID + " INTEGER PRIMARY KEY NOT NULL ,"
                     + MESAS_CAPACIDAD + " INTEGER NOT NULL"
+                    + ")"
+            );
+            db.beginTransaction();
+
+            db.execSQL( "CREATE TABLE IF NOT EXISTS " + TABLA_RESERVAS
+                    + "("
+                    + RESERVA_TITULAR + " TEXT PRIMARY KEY NOT NULL ,"
+                    + RESERVA_EMAIL + " TEXT NOT NULL ,"
+                    + RESERVA_MENU + " TEXT  NOT NULL ,"
+                    + RESERVA_HORARIO_INICIO + " TEXT NOT NULL ,"
+                    + RESERVA_HORARIO_FIN + " TEXT NOT NULL ,"
+                    + RESERVA_MESA + " INTEGER NOT NULL ,"
+                    +" FOREIGN KEY " + "(" + RESERVA_MESA + ")" +
+                    " REFERENCES " + TABLA_MESAS +"(" + MESAS_ID + ")"
                     + ")"
             );
 
@@ -75,7 +98,7 @@ public class SqlIO  extends SQLiteOpenHelper {
                 MESAS_ID
         );
     }
-
+//FUNCION PARA INSERTAR UNA MESA COMPLETA, CON SU NUMERO DE MESA Y PLAZAS
     public void inserta_Mesa(int id,int capacidad)
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
@@ -83,7 +106,6 @@ public class SqlIO  extends SQLiteOpenHelper {
 
         VALORES.put( MESAS_ID, id );
         VALORES.put( MESAS_CAPACIDAD, capacidad );
-
 
         try {
             DB.beginTransaction();
@@ -100,14 +122,10 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
-
+//FUNCION PARA ELIMINAR LA MESA A PARTIR DE SU ID
     public void eliminar_Mesa(int id)
     {
         final SQLiteDatabase DB = this.getWritableDatabase();
-        final ContentValues VALORES = new ContentValues();
-
-        VALORES.put( MESAS_ID, id );
-
         try {
             DB.beginTransaction();
             DB.execSQL("DELETE FROM " + TABLA_MESAS
@@ -124,5 +142,93 @@ public class SqlIO  extends SQLiteOpenHelper {
         } finally {
             DB.endTransaction();
         }
+    }
+    //FUNCION PARA CAMBIAR LAS PLAZAS DE UNA MESA A PARTIR DE SU ID
+    public void cambiar_plazas(int id,int plazas)
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+        try {
+            DB.beginTransaction();
+            DB.execSQL("UPDATE " + TABLA_MESAS
+                    + " SET " + MESAS_CAPACIDAD
+                    + " = " + plazas
+                    + " WHERE "
+                    + MESAS_ID + " = "
+                    + id
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
+//FUNCION PARA ELIMINAR TODAS LAS MESAS
+    public void eliminar_Todas()
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+
+        try {
+            DB.beginTransaction();
+            DB.execSQL("DELETE FROM " + TABLA_MESAS
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
+
+//FUNCION PARA INSERTAR UNA MESA COMPLETA, CON SU NUMERO DE MESA Y PLAZAS
+    public void inserta_Reserva(int id_mesa, String titular,String email, String menu, String horario_inicio, String horario_fin)
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+        final ContentValues VALORES = new ContentValues();
+
+        VALORES.put( RESERVA_MESA, id_mesa );
+        VALORES.put( RESERVA_TITULAR, titular );
+        VALORES.put( RESERVA_EMAIL, email );
+        VALORES.put( RESERVA_MENU, menu );
+        VALORES.put( RESERVA_HORARIO_INICIO, horario_inicio );
+        VALORES.put( RESERVA_HORARIO_FIN, horario_fin );
+
+        try {
+            DB.beginTransaction();
+            DB.insert(
+                    TABLA_RESERVAS,
+                    null,
+                    VALORES
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
+
+    //FUNCION LISTAR LAS RESERVAS DE UNA DETERMINADA MESA
+    public Cursor getCursorReservas()
+    {
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.query(
+                TABLA_RESERVAS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                RESERVA_MESA
+        );
+                        /*"SELECT FROM " + TABLA_RESERVAS
+                        + " WHERE "
+                        + RESERVA_MESA + " = "
+                        + id,*/
     }
 }
