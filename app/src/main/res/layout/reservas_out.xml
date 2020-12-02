@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Titular de la reserva :"
+            android:text="Titular:"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Email del titular de la reserva"
+            android:text="Email del titular"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Hora de inicio de la reserva"
+            android:text="Hora de inicio"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Hora de finalización de la reserva"
+            android:text="Hora de finalización"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -155,26 +155,6 @@
         android:background="#a7c0cd"
         android:orientation="horizontal"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="Id de la mesa de la reserva"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:shadowColor="#8a6603"
-            android:shadowDx="3"
-            android:shadowDy="2"
-            android:shadowRadius="1.8"
-            />
-        <TextView      android:id="@+id/id_lvreservas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            />
     </LinearLayout>
 
 </LinearLayout>

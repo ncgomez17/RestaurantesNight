@@ -28,22 +28,12 @@ public class Mesas_activity extends AppCompatActivity {
     private ListView LV_MESAS;
     private SimpleCursorAdapter cursorAdapter;
     private SqlIO sqlIO;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_mesas_activity);
-        // INICIALIZAR ATRIBUTOS
+    public void onStart() {
+        super.onStart();
         this.sqlIO = new SqlIO( this.getApplicationContext() );
-        LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
-        final Button BT_INSERTA = (Button) this.findViewById( R.id.btAnhadirMesas );
-        // INICIALIZAR VISTAS
-        BT_INSERTA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Mesas_activity.this.inserta();
-            }
-        });
+        final ListView LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
         //Creamos el cursor Adapter pasándole list_mesas
         this.cursorAdapter = new SimpleCursorAdapter(
                 this,
@@ -57,6 +47,31 @@ public class Mesas_activity extends AppCompatActivity {
         //Registramos el menu contextual
         this.registerForContextMenu(LV_MESAS);
         this.actualiza();
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_mesas_activity);
+        // INICIALIZAR ATRIBUTOS
+
+        LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
+        final Button BT_INSERTA = (Button) this.findViewById( R.id.btAnhadirMesas );
+        // INICIALIZAR VISTAS
+        BT_INSERTA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Mesas_activity.this.inserta();
+            }
+        });
+
+    }
+    @Override
+    public void onPause() {
+
+        super.onPause();
+        this.sqlIO.close();
+        this.cursorAdapter.getCursor().close();
     }
 //Actualiza el contenido del cursor
     private void actualiza()

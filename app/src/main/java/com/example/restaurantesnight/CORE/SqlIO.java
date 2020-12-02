@@ -12,7 +12,7 @@ import java.util.Date;
 /*Base de datos SQlite, tendrá tablas de mesas y de usuarios */
 public class SqlIO  extends SQLiteOpenHelper {
     private static final String DB_NOMBRE="RestauranteNight";
-    private static final int DB_VERSION=1;
+    private static final int DB_VERSION=12;
     public static final String TABLA_MESAS="Mesas";
     public static final String MESAS_ID="_id";
     public static final String MESAS_CAPACIDAD="capacidad";
@@ -22,7 +22,7 @@ public class SqlIO  extends SQLiteOpenHelper {
     public static final String RESERVA_MENU="Menu";
     public static final String RESERVA_HORARIO_INICIO="Horario_Inicio";
     public static final String RESERVA_HORARIO_FIN="Horario_Fin";
-    public static final String RESERVA_MESA="Id_Mesa";
+    public static final String RESERVA_MESA="IdMesa";
 
     public SqlIO(Context cntxt){
         super(cntxt,DB_NOMBRE,null,DB_VERSION);
@@ -42,18 +42,17 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + MESAS_CAPACIDAD + " INTEGER NOT NULL"
                     + ")"
             );
-            db.beginTransaction();
 
-            db.execSQL( "CREATE TABLE IF NOT EXISTS " + TABLA_RESERVAS
+            db.execSQL( " CREATE TABLE IF NOT EXISTS " + TABLA_RESERVAS
                     + "("
                     + RESERVA_TITULAR + " TEXT PRIMARY KEY NOT NULL ,"
                     + RESERVA_EMAIL + " TEXT NOT NULL ,"
                     + RESERVA_MENU + " TEXT  NOT NULL ,"
                     + RESERVA_HORARIO_INICIO + " TEXT NOT NULL ,"
                     + RESERVA_HORARIO_FIN + " TEXT NOT NULL ,"
-                    + RESERVA_MESA + " INTEGER NOT NULL ,"
-                    +" FOREIGN KEY " + "(" + RESERVA_MESA + ")" +
-                    " REFERENCES " + TABLA_MESAS +"(" + MESAS_ID + ")"
+                    + MESAS_ID + " INTEGER NOT NULL ,"
+                    +" FOREIGN KEY " + "(" + MESAS_ID + ")" +
+                    " REFERENCES " + TABLA_MESAS + " (" + MESAS_ID + ")"
                     + ")"
             );
 
@@ -75,7 +74,7 @@ public class SqlIO  extends SQLiteOpenHelper {
             db.beginTransaction();
 
             db.execSQL( "DROP TABLE IF EXISTS " + TABLA_MESAS );
-
+            db.execSQL( "DROP TABLE IF EXISTS " + TABLA_RESERVAS );
             db.setTransactionSuccessful();
         } catch(SQLException error) {
             Log.e( DB_NOMBRE, error.getMessage() );
@@ -190,7 +189,7 @@ public class SqlIO  extends SQLiteOpenHelper {
         final SQLiteDatabase DB = this.getWritableDatabase();
         final ContentValues VALORES = new ContentValues();
 
-        VALORES.put( RESERVA_MESA, id_mesa );
+        VALORES.put( MESAS_ID, id_mesa );
         VALORES.put( RESERVA_TITULAR, titular );
         VALORES.put( RESERVA_EMAIL, email );
         VALORES.put( RESERVA_MENU, menu );
@@ -214,17 +213,18 @@ public class SqlIO  extends SQLiteOpenHelper {
     }
 
     //FUNCION LISTAR LAS RESERVAS DE UNA DETERMINADA MESA
-    public Cursor getCursorReservas()
+    public Cursor getCursorReservas(String id)
     {
         final SQLiteDatabase DB = this.getReadableDatabase();
+        String[] selectionArgs = {id};
         return DB.query(
                 TABLA_RESERVAS,
                 null,
+                MESAS_ID + "=?",
+                selectionArgs,
                 null,
                 null,
-                null,
-                null,
-                RESERVA_MESA
+                MESAS_ID
         );
                         /*"SELECT FROM " + TABLA_RESERVAS
                         + " WHERE "

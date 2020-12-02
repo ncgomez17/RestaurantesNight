@@ -168,8 +168,9 @@ public class Reservas_Activity extends AppCompatActivity {
     }
 
     //FUNCIÓN QUE LISTA LAS RESERVAS QUE TIENE LA MESA SELECCIONADA
-    private void listar_reservas_mesa(){
+    private void listar_reservas_mesa(String id){
         Intent intent = new Intent (Reservas_Activity.this, Listar_reservas_activity.class);
+        intent.putExtra("Mesa", id);
         startActivity(intent);
     }
 
@@ -203,7 +204,7 @@ public class Reservas_Activity extends AppCompatActivity {
                 case R.id.contx_eliminar_reserva:
                     return true;
                 case R.id.contx_listar_reservas:
-                    this.listar_reservas_mesa();
+                    this.listar_reservas_mesa(ID_MESA.getText().toString());
                     return true;
                 default:
                     return super.onContextItemSelected(item);
