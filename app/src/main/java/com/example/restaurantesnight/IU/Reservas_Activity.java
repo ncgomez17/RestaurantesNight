@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.restaurantesnight.CORE.SendMail;
 import com.example.restaurantesnight.CORE.SqlIO;
 import com.example.restaurantesnight.R;
 
@@ -75,6 +76,10 @@ public void onStart(){
         this.cursorAdapter.swapCursor(
                 this.sqlIO.getCursorMesas() );
     }
+    private void sendEmail(String email,String subject, String message) {
+        SendMail sm = new SendMail(this, email, subject, message);
+        sm.execute();
+    }
     //Funcion para validar un email
     private boolean validarEmail(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
@@ -111,6 +116,8 @@ public void onStart(){
                             txt_fecha.setText((dayOfMonth+"/"+ (month+1)+ "/"+year));
                         }
                     },anho,mes,dia);
+                    //configuramos para que no se puedan seleccionar dias anteriores al actual y lo mostramos
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                     datePickerDialog.show();
                 }
         });
@@ -140,9 +147,12 @@ public void onStart(){
                 DatePickerDialog datePickerDialog = new DatePickerDialog(Reservas_Activity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
                         txt_fechaFin.setText((dayOfMonth+"/"+ (month+1)+ "/"+year));
                     }
                 },anho,mes,dia);
+                //configuramos para que no se puedan seleccionar dias anteriores al actual y lo mostramos
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
         });
@@ -167,6 +177,7 @@ public void onStart(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
                     String errores="";
+                    StringBuilder mensage= new StringBuilder();
                     boolean correcto=true;
                     String toretInicio = txt_hora.getText().toString() + " " + txt_fecha.getText().toString();
 
@@ -182,10 +193,18 @@ public void onStart(){
 
                     }
                     if(correcto){
+                        //CONFIGURAMOS EL MENSAJE DEL CORREO
+                        mensage.append("Bienvenido a RestaurantesNight,le indicamos la información de su Reserva:");
+                        mensage.append("Nombre del titular:"+titular);
+                        mensage.append("Menu:"+menu);
+                        mensage.append("Fecha y hora de inicio:"+toretInicio);
+                        mensage.append("Fecha y hora de fin:"+toretFin);
+                        //INSERTAMOS EJN LA BASE DE DATOS Y ENVIAMOS EL CORREO
                         Reservas_Activity.this.sqlIO.inserta_Reserva(id_mesa, titular, email, menu, toretInicio, toretFin);
+                        Reservas_Activity.this.sendEmail(email,"Reserva",mensage.toString());
                     }else {
+                        //EN CASO DE ERROR AL AÑADIR LA RESERVA MOSTRAMOS ESTE MENSAJE POR PANTALLA
                         Toast.makeText(Reservas_Activity.this, errores, Toast.LENGTH_SHORT).show();
-
                     }
 
             }
@@ -221,7 +240,6 @@ public void onStart(){
         final TextView NUM_PLAZAS=l_mesa.findViewById(R.id.num_plazas);
         int id_mesa = Integer.parseInt(ID_MESA.getText().toString());
         try {
-
 
             switch (item.getItemId()) {
                 case R.id.contx_anhadir_reserva:
