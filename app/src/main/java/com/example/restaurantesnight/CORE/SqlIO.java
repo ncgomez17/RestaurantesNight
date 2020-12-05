@@ -211,12 +211,33 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
+    //FUNCION PARA ELIMINAR UNA RESERVA A PARTIR DEL NOMBRE DEL TITULAR
+    public void eliminar_Reserva(String titular)
+    {
+        final SQLiteDatabase DB = this.getWritableDatabase();
+        try {
+            DB.beginTransaction();
+            DB.execSQL("DELETE FROM " + TABLA_RESERVAS
+
+                    + " WHERE "
+                    + RESERVA_TITULAR + " = "
+                    + "'"+ titular +"'"
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+    }
 
     //FUNCION LISTAR LAS RESERVAS DE UNA DETERMINADA MESA
-    public Cursor getCursorReservas(String id)
+    public Cursor getCursorReservas(int id)
     {
         final SQLiteDatabase DB = this.getReadableDatabase();
-        String[] selectionArgs = {id};
+        String[] selectionArgs = {""+id+""};
         return DB.query(
                 TABLA_RESERVAS,
                 null,

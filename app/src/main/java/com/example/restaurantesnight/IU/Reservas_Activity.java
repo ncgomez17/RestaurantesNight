@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,40 +27,58 @@ import com.example.restaurantesnight.CORE.SqlIO;
 import com.example.restaurantesnight.R;
 
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class Reservas_Activity extends AppCompatActivity {
     private ListView LV_MESAS;
     private SimpleCursorAdapter cursorAdapter;
     private SqlIO sqlIO;
+@Override
+public void onStart(){
+    super.onStart();
+        LV_MESAS = (ListView) this.findViewById( R.id.lvMesas_reserva );
 
+    // INICIALIZAR VISTAS
+
+    //Creamos el cursor Adapter pasándole list_mesas
+    this.cursorAdapter = new SimpleCursorAdapter(
+            this,
+            R.layout.list_mesas,
+            null,
+            new String[] { SqlIO.MESAS_ID, SqlIO.MESAS_CAPACIDAD },
+            new int[] { R.id.id_mesa, R.id.num_plazas },
+            0
+    );
+    LV_MESAS.setAdapter( cursorAdapter );
+    this.actualiza();
+}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_reservas);
         this.sqlIO = new SqlIO( this.getApplicationContext() );
         LV_MESAS = (ListView) this.findViewById( R.id.lvMesas_reserva );
-
-        // INICIALIZAR VISTAS
-
-        //Creamos el cursor Adapter pasándole list_mesas
-        this.cursorAdapter = new SimpleCursorAdapter(
-                this,
-                R.layout.list_mesas,
-                null,
-                new String[] { SqlIO.MESAS_ID, SqlIO.MESAS_CAPACIDAD },
-                new int[] { R.id.id_mesa, R.id.num_plazas },
-                0
-        );
-        LV_MESAS.setAdapter( cursorAdapter );
         //Registramos el menu contextual
         this.registerForContextMenu(LV_MESAS);
-        this.actualiza();
     }
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        this.sqlIO.close();
+        this.cursorAdapter.getCursor().close();
+    }
+
     //Actualiza el contenido del cursor
     private void actualiza()
     {
         this.cursorAdapter.swapCursor(
                 this.sqlIO.getCursorMesas() );
+    }
+    //Funcion para validar un email
+    private boolean validarEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
     //Crea un dialógo para insertar una reserva en la mesa
     private void inserta(int id_mesa)
@@ -146,7 +166,8 @@ public class Reservas_Activity extends AppCompatActivity {
         DLG.setPositiveButton("Guarda", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try {
+                    String errores="";
+                    boolean correcto=true;
                     String toretInicio = txt_hora.getText().toString() + " " + txt_fecha.getText().toString();
 
                     String toretFin = txt_horaFin.getText().toString() + " " + txt_fechaFin.getText().toString();
@@ -155,16 +176,22 @@ public class Reservas_Activity extends AppCompatActivity {
                     String email =EditTextEmail.getText().toString();
                     String menu = EditTextMenu.getText().toString();
 
-                    Reservas_Activity.this.sqlIO.inserta_Reserva(id_mesa, titular, email, menu, toretInicio, toretFin);
+                    if (!validarEmail(email)){
+                        errores+="El email es incorrecto";
+                        correcto=false;
 
+                    }
+                    if(correcto){
+                        Reservas_Activity.this.sqlIO.inserta_Reserva(id_mesa, titular, email, menu, toretInicio, toretFin);
+                    }else {
+                        Toast.makeText(Reservas_Activity.this, errores, Toast.LENGTH_SHORT).show();
 
-                }catch (NumberFormatException e){
-                    e.printStackTrace();
-                }
+                    }
+
             }
         });
-
         DLG.create().show();
+
     }
 
     //FUNCIÓN QUE LISTA LAS RESERVAS QUE TIENE LA MESA SELECCIONADA

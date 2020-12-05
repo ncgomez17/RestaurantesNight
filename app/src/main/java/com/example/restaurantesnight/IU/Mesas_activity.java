@@ -33,7 +33,7 @@ public class Mesas_activity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         this.sqlIO = new SqlIO( this.getApplicationContext() );
-        final ListView LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
+         LV_MESAS = (ListView) this.findViewById( R.id.lvMesas );
         //Creamos el cursor Adapter pasándole list_mesas
         this.cursorAdapter = new SimpleCursorAdapter(
                 this,
@@ -45,7 +45,6 @@ public class Mesas_activity extends AppCompatActivity {
         );
         LV_MESAS.setAdapter( cursorAdapter );
         //Registramos el menu contextual
-        this.registerForContextMenu(LV_MESAS);
         this.actualiza();
     }
     @Override
@@ -64,7 +63,7 @@ public class Mesas_activity extends AppCompatActivity {
                 Mesas_activity.this.inserta();
             }
         });
-
+        this.registerForContextMenu(LV_MESAS);
     }
     @Override
     public void onPause() {
