@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         bt_mesas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent (MainActivity.this, Mesas_activity.class);
+                Intent intent = new Intent (MainActivity.this, MesasActivity.class);
                 startActivity(intent);
 
             }
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         bt_reservas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent2 = new Intent (MainActivity.this, Reservas_Activity.class);
+                Intent intent2 = new Intent (MainActivity.this, ReservasActivity.class);
                 startActivity(intent2);
             }
         });

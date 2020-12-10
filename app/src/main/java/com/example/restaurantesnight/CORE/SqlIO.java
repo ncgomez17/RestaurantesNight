@@ -22,7 +22,6 @@ public class SqlIO  extends SQLiteOpenHelper {
     public static final String RESERVA_MENU="Menu";
     public static final String RESERVA_HORARIO_INICIO="Horario_Inicio";
     public static final String RESERVA_HORARIO_FIN="Horario_Fin";
-    public static final String RESERVA_MESA="IdMesa";
 
     public SqlIO(Context cntxt){
         super(cntxt,DB_NOMBRE,null,DB_VERSION);
@@ -224,6 +223,7 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + "'"+ titular +"'"
 
             );
+
             DB.setTransactionSuccessful();
         } catch(SQLException error)
         {
@@ -232,6 +232,50 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
     }
+    //FUNCION PARA COMPROBAR SI UN TITULAR ESTA EN LA BASE DE DATOS
+    public boolean comprobar_Titular(String titular)
+    {
+        boolean correcto= true;
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        try {
+            DB.beginTransaction();
+            Cursor c= DB.rawQuery(" SELECT "+ MESAS_ID + " FROM " +TABLA_RESERVAS + " WHERE "+ RESERVA_TITULAR + " == ?",new String[] {""+titular+""});
+            if( c.getCount() == 0){
+                correcto=false;
+            }
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+        return  correcto;
+    }
+    //FUNCION PARA COMPROBAR SI UNA FECHA QUE SE VA INTRODUCIR ES VALIDA
+    public boolean comprobar_Fecha(String fechaInicio, String fechaFin,int mesa)
+    {
+        boolean correcto= true;
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        try {
+            DB.beginTransaction();
+            Cursor c= DB.rawQuery(" SELECT "+ MESAS_ID + " FROM " +TABLA_RESERVAS + "" +
+                    " WHERE "+ " ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +
+                    " OR "+" ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +
+                    " AND " + MESAS_ID + " == ?",new String[] {""+fechaInicio+"",""+fechaFin+"",""+mesa+""});
+            if( c.getCount() == 0){
+                correcto=false;
+            }
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+        return  correcto;
+    }
+
 
     //FUNCION LISTAR LAS RESERVAS DE UNA DETERMINADA MESA
     public Cursor getCursorReservas(int id)

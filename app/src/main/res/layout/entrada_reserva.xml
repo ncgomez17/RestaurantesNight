@@ -88,27 +88,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button     android:id="@+id/btn_fechaFin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="FechaFin"
-            android:layout_margin="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <TextView android:id="@+id/txt_fechaFin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_margin="10dp"
-            android:hint="dd/mm/aaaa"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <Button     android:id="@+id/btn_horaFin"
             android:layout_width="wrap_content"
