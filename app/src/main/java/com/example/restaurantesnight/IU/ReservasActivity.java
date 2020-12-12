@@ -63,6 +63,13 @@ public void onStart(){
         this.registerForContextMenu(LV_MESAS);
     }
     @Override
+    public void onResume(){
+    //Actualizamos las reservas y eliminamos las que ya han pasado el tiempo
+        super.onResume();
+        this.sqlIO.eliminar_Fechas();
+        this.actualiza();
+    }
+    @Override
     public void onPause()
     {
         super.onPause();
@@ -88,7 +95,6 @@ public void onStart(){
         }else{
             return true;
         }
-
     }
     //Funcion para validar un email
     private boolean validarEmail(String email) {
@@ -188,10 +194,15 @@ public void onStart(){
                     if(correcto){
                         //CONFIGURAMOS EL MENSAJE DEL CORREO
                         mensage.append("Bienvenido a RestaurantesNight,le indicamos la información de su Reserva:");
+                        mensage.append("\n");
                         mensage.append("Nombre del titular:"+titular);
+                        mensage.append("\n");
                         mensage.append("Menu:"+menu);
+                        mensage.append("\n");
                         mensage.append("Fecha y hora de inicio:"+toretInicio);
+                        mensage.append("\n");
                         mensage.append("Fecha y hora de fin:"+toretFin);
+                        mensage.append("\n");
                         //INSERTAMOS EJN LA BASE DE DATOS Y ENVIAMOS EL CORREO
                         ReservasActivity.this.sqlIO.inserta_Reserva(id_mesa, titular, email, menu, toretInicio, toretFin);
                         ReservasActivity.this.sendEmail(email,"Reserva",mensage.toString());

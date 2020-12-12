@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /*Base de datos SQlite, tendrá tablas de mesas y de usuarios */
@@ -274,6 +275,37 @@ public class SqlIO  extends SQLiteOpenHelper {
             DB.endTransaction();
         }
         return  correcto;
+    }
+    //FUNCION PARA ELIMINAR FECHAS QUE YA PASARON
+    public String eliminar_Fechas()
+    {
+        final Calendar c= Calendar.getInstance();
+        int anho=c.get(Calendar.YEAR);
+        int mes=c.get(Calendar.MONTH)+1;
+        int dia=c.get(Calendar.DAY_OF_MONTH);
+        int hora=c.get(Calendar.HOUR_OF_DAY);
+        int minutos=c.get(Calendar.MINUTE);
+        String fecha= anho+"/"+ mes+ "/"+dia+" "+hora+":"+minutos;
+        final SQLiteDatabase DB = this.getWritableDatabase();
+        try {
+            DB.beginTransaction();
+            DB.execSQL("DELETE FROM " + TABLA_RESERVAS
+
+                    + " WHERE "
+                    + RESERVA_HORARIO_FIN + " <= "
+                    +  "'"+ fecha +"'" + " OR "
+                    + RESERVA_HORARIO_INICIO + " <= "
+                    +  "'"+ fecha +"'"
+
+            );
+            DB.setTransactionSuccessful();
+        } catch(SQLException error)
+        {
+            Log.e( DB_NOMBRE, error.getMessage() );
+        } finally {
+            DB.endTransaction();
+        }
+        return fecha;
     }
 
 

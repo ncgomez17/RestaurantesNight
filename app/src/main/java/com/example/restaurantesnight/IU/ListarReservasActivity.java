@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,9 +46,19 @@ public class ListarReservasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.list_reservas);
-
+        Button btn_actualizar= (Button) this.findViewById(R.id.btn_Actualizar);
         LV_RESERVAS = (ListView) this.findViewById(R.id.lvreservas_Mesa);
         int id_m=Integer.parseInt(getIntent().getStringExtra("Mesa"));
+        //CONFIGURAMOS EL BOTON PARA QUE ACTUALICE LAS RESERVAS
+        btn_actualizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListarReservasActivity.this.sqlIO.eliminar_Fechas();
+                ListarReservasActivity.this.actualiza(id_m);
+                Toast.makeText(getApplicationContext(),"Se han actualizado las reservas de esta mesa correctamente",Toast.LENGTH_LONG).show();
+            }
+        });
+        //CONFIGURAMOS BOTON PARA ELIMINAR LAS RESERVAS
         LV_RESERVAS.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
                 AlertDialog.Builder adb=new AlertDialog.Builder(ListarReservasActivity.this);
@@ -67,6 +79,14 @@ public class ListarReservasActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public void onResume(){
+        //Actualizamos las reservas y eliminamos las que ya han pasado el tiempo de la mesa correspondiente
+        int id_m=Integer.parseInt(getIntent().getStringExtra("Mesa"));
+        super.onResume();
+        this.sqlIO.eliminar_Fechas();
+        this.actualiza(id_m);
     }
     public void onPause() {
 

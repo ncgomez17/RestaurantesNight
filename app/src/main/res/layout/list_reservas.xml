@@ -23,6 +23,17 @@
             android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             />
+        <Button android:id="@+id/btn_Actualizar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Actualizar Reservas"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            />
 
     </LinearLayout>
 
