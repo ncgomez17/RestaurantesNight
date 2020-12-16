@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/filtrar_Titular" android:id="@+id/menu_filtrar_titular" />
+    <item android:title="@string/filtrar_Correo" android:id="@+id/menu_filtrar_Correo" />
+    <item android:title="@string/filtrar_dia" android:id="@+id/menu_filtrar_Dia" />
+</menu>

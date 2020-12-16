@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".IU.ListarReservasActivity">
         </activity>
+        <activity android:name=".IU.FiltrarReservas">
+        </activity>
     </application>
 
 </manifest>

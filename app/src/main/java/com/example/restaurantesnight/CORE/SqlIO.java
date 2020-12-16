@@ -261,9 +261,9 @@ public class SqlIO  extends SQLiteOpenHelper {
         try {
             DB.beginTransaction();
             Cursor c= DB.rawQuery(" SELECT "+ MESAS_ID + " FROM " +TABLA_RESERVAS + "" +
-                    " WHERE "+ " ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +
-                    " OR "+" ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +
-                    " AND " + MESAS_ID + " == ?",new String[] {""+fechaInicio+"",""+fechaFin+"",""+mesa+""});
+                    " WHERE "+ "( ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +
+                    " OR "+" ? " + " BETWEEN " + RESERVA_HORARIO_INICIO + " AND " + RESERVA_HORARIO_FIN +" ) "+
+                    " AND " + MESAS_ID + " = ?",new String[] {""+fechaInicio+"",""+fechaFin+"",""+mesa+""});
             if( c.getCount() == 0){
                 correcto=false;
             }
@@ -293,8 +293,6 @@ public class SqlIO  extends SQLiteOpenHelper {
 
                     + " WHERE "
                     + RESERVA_HORARIO_FIN + " <= "
-                    +  "'"+ fecha +"'" + " OR "
-                    + RESERVA_HORARIO_INICIO + " <= "
                     +  "'"+ fecha +"'"
 
             );
@@ -323,9 +321,70 @@ public class SqlIO  extends SQLiteOpenHelper {
                 null,
                 MESAS_ID
         );
-                        /*"SELECT FROM " + TABLA_RESERVAS
-                        + " WHERE "
-                        + RESERVA_MESA + " = "
-                        + id,*/
+
+    }
+    //FUNCION PARA LISTAR TODAS LAS RESERVAS
+    public Cursor getCursorReservasTotal()
+    {
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        return DB.query(
+                TABLA_RESERVAS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+    }
+    //FUNCION PARA LISTAR TODAS LAS RESERVAS DE UN TITULAR
+    public Cursor getCursorReservasTitular(String titular)
+    {
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        String[] selectionArgs = {titular};
+        return DB.query(
+                TABLA_RESERVAS,
+                null,
+                RESERVA_TITULAR + "==?",
+                selectionArgs,
+                null,
+                null,
+                MESAS_ID
+        );
+
+    }
+    //FUNCION PARA LISTAR TODAS LAS RESERVAS DE UN EMAIL
+    public Cursor getCursorReservasEmail(String email)
+    {
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        String[] selectionArgs = {email};
+        return DB.query(
+                TABLA_RESERVAS,
+                null,
+                RESERVA_EMAIL + "==?",
+                selectionArgs,
+                null,
+                null,
+                MESAS_ID
+        );
+
+    }
+    //FUNCION PARA LISTAR TODAS LAS RESERVAS DE UN DIA
+    public Cursor getCursorReservasDia(String fecha)
+    {
+        final SQLiteDatabase DB = this.getReadableDatabase();
+        String[] selectionArgs = {fecha};
+        return DB.query(
+                TABLA_RESERVAS,
+                null,
+                "SUBSTR("+RESERVA_HORARIO_INICIO + ", 0, INSTR("+RESERVA_HORARIO_INICIO+ ", \" \""+ "))"
+                + "== ?",
+                selectionArgs,
+                null,
+                null,
+                MESAS_ID
+        );
+
     }
 }

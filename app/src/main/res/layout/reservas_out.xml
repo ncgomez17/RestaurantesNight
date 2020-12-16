@@ -149,12 +149,5 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#a7c0cd"
-        android:orientation="horizontal"
-        >
-    </LinearLayout>
 
 </LinearLayout>
