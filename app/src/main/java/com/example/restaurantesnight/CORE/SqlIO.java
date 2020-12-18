@@ -134,6 +134,13 @@ public class SqlIO  extends SQLiteOpenHelper {
                     + id
 
             );
+            DB.execSQL("DELETE FROM " + TABLA_RESERVAS
+
+                    + " WHERE "
+                    + MESAS_ID + " = "
+                    + id
+
+            );
             DB.setTransactionSuccessful();
         } catch(SQLException error)
         {
@@ -141,6 +148,7 @@ public class SqlIO  extends SQLiteOpenHelper {
         } finally {
             DB.endTransaction();
         }
+
     }
     //FUNCION PARA CAMBIAR LAS PLAZAS DE UNA MESA A PARTIR DE SU ID
     public void cambiar_plazas(int id,int plazas)
@@ -378,8 +386,10 @@ public class SqlIO  extends SQLiteOpenHelper {
         return DB.query(
                 TABLA_RESERVAS,
                 null,
-                "SUBSTR("+RESERVA_HORARIO_INICIO + ", 0, INSTR("+RESERVA_HORARIO_INICIO+ ", \" \""+ "))"
-                + "== ?",
+                "SUBSTR("+ RESERVA_HORARIO_INICIO + ", 1, 12)==?",
+                //+ "== ?"
+                //"SUBSTR("+RESERVA_HORARIO_INICIO + ", 0, INSTR("+RESERVA_HORARIO_INICIO+ ", \" \""+ "))"
+                //+ "== ?",
                 selectionArgs,
                 null,
                 null,
