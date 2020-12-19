@@ -350,12 +350,11 @@ public class SqlIO  extends SQLiteOpenHelper {
     public Cursor getCursorReservasTitular(String titular)
     {
         final SQLiteDatabase DB = this.getReadableDatabase();
-        String[] selectionArgs = {titular};
         return DB.query(
                 TABLA_RESERVAS,
                 null,
-                RESERVA_TITULAR + "==?",
-                selectionArgs,
+                RESERVA_TITULAR+" LIKE '"+ titular+ "%'" ,
+                null,
                 null,
                 null,
                 MESAS_ID
@@ -366,12 +365,11 @@ public class SqlIO  extends SQLiteOpenHelper {
     public Cursor getCursorReservasEmail(String email)
     {
         final SQLiteDatabase DB = this.getReadableDatabase();
-        String[] selectionArgs = {email};
         return DB.query(
                 TABLA_RESERVAS,
                 null,
-                RESERVA_EMAIL + "==?",
-                selectionArgs,
+                RESERVA_EMAIL+" LIKE '"+ email+ "%'" ,
+                null,
                 null,
                 null,
                 MESAS_ID
@@ -386,10 +384,7 @@ public class SqlIO  extends SQLiteOpenHelper {
         return DB.query(
                 TABLA_RESERVAS,
                 null,
-                "SUBSTR("+ RESERVA_HORARIO_INICIO + ", 1, 12)==?",
-                //+ "== ?"
-                //"SUBSTR("+RESERVA_HORARIO_INICIO + ", 0, INSTR("+RESERVA_HORARIO_INICIO+ ", \" \""+ "))"
-                //+ "== ?",
+                "SUBSTR("+ RESERVA_HORARIO_INICIO + ",1,10) == ?",
                 selectionArgs,
                 null,
                 null,

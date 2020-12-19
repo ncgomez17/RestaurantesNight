@@ -62,7 +62,7 @@ public class FiltrarReservas  extends AppCompatActivity {
             public void onClick(View v) {
                 FiltrarReservas.this.sqlIO.eliminar_Fechas();
                 FiltrarReservas.this.actualizaInicio();
-                Toast.makeText(getApplicationContext(),"Se han actualizado las reservas de esta mesa correctamente",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Se han actualizado todas las reservas correctamente",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -164,13 +164,14 @@ public class FiltrarReservas  extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        String fecha = DIA_RESERVA.getText().toString();
+
+
 
         DLG.setPositiveButton("Buscar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    FiltrarReservas.this.actualizaFecha(fecha);
+                    FiltrarReservas.this.actualizaFecha(DIA_RESERVA.getText().toString());
                 }catch (NumberFormatException e){
                     e.printStackTrace();
                 }
